@@ -29,7 +29,7 @@
 
 \title{Camera pose from face images}
 
-\titlerunning{Camera pose from face images}
+\titlerunning{Estimating the distance between a camera and head using a single 2d image}
 
 \maketitle
 
@@ -54,7 +54,7 @@ The paper is organized as follows.
 Section \ref{sec:related} covers related work from psychology and computer vision.
 Section \ref{sec:method} explains our method.
 In Section \ref{sec:experiments}, we validate our method on the Texas 3D Face Recognition Database.
-Section \ref{sec:discussion} is the discussion.
+Section \ref{sec:discussion} is the discussion and conclusion.
 
 \begin{figure}[ht!]
 \centering
@@ -82,7 +82,7 @@ This illustrates the migration of fiducials as a function of camera distance and
 \label{fig:fiducial_migration}
 \end{figure}
 
-\subsection{Related works} \label{sec:related}
+\section{Related works} \label{sec:related}
 There is previous work on head pose estimation from 2D images; see \cite{murphy2009head} for a recent survey.
 However, most methods attempt to recover a subset of the yaw, pitch, and roll of the head with respect to the camera.
 To our knowledge, these methods do not attempt to estimate the distance between the camera and head; Figure \ref{fig:head_pose} illustrates the difference.

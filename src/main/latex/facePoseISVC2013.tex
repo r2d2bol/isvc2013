@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-\afbnote{todo...}
+We present a method for estimating the distance between camera and head in 2D images from a calibrated camera.  The distance is estimated by solving for the camera pose using Effictive Perspective $n$ Point (EP$n$P).  Leading head pose estimation algorithms focus mainly on head orientation (yaw, pitch, and roll) and translations perpendicular to the camera principal axis.  Our contribution is a system which can estimate head pose under large translations parallel to the camera's principal axis.  Our method uses a set of exemplar 3D human heads to estimate the distance between camera and a previously unseen head.  Results are validated using the Texas 3D Recognition Database.
 \end{abstract}
 
 \section{Introduction}
@@ -255,7 +255,7 @@ Providing an estimate of this distance can be used to mitage the effects of pers
 In this paper, we have used a dataset consisting of facial range images with manually labelled fiducials.    
 Furthermore we assume an ideal pinhole camera model and we control the pose of both head and camera.  
 This simplifies the problem since we have accurate ground truth 2D and 3D fiducial locations. 
-For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}, or naturally ocurring features (e.g. SIFT features \cite{lowe} as in \cite{ohayon2006robust}.    
+For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}, or naturally ocurring features (e.g. SIFT features \cite{lowe}) as in \cite{ohayon2006robust}.    
 
 \bibliographystyle{splncs}
 \bibliography{library}

@@ -286,16 +286,20 @@ Note the probes tend to match exemplars with similar attributes, e.g. race and g
 \end{figure}
 
 \section{Conclusion and future work} \label{sec:discussion}
-We have shown a method for estimating the distance from camera to a previously unseen face using correspondences of 2D imaged fiducials to 3D fiducial locations on exemplar heads.  
-The distance estimate is accurate in distances ranging from 10cm to 300 cm for the frontal and $3/4$ profile views.  
-Providing an estimate of this distance can be used to mitage the effects of perspective distortion in face recognition.  
+We presented a method for estimating camera distance to a previously unseen face.
+The method uses correspondences of 2D image fiducials to 3D fiducial locations on exemplar heads.  
+Though the method is simple, it is accurate for distances ranging from 10cm to 300cm for the frontal and $3/4$ profile views.  
+This estimate could be used to mitigate the effects of perspective distortion for face recognition.
+The method could also be used as a direct source of biometric information, by leveraging the attributes of the closest matching exemplars.
 
-In this paper, we have used a dataset consisting of facial range images with manually labelled fiducials.    
-Furthermore we assume an ideal pinhole camera model and we control the pose of both head and camera.  
-This simplifies the problem since we have accurate ground truth 2D and 3D fiducial locations. 
-For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}, or naturally ocurring features (e.g. SIFT features \cite{lowe}) as in \cite{ohayon2006robust}.
-Replicating these results on real images is also future research direction.
+% In this paper, we have used a dataset consisting of facial range images with manually labelled fiducials.    
+% Furthermore we assume an ideal pinhole camera model and we control the pose of both head and camera.  
+% This simplifies the problem since we have accurate ground truth 2D and 3D fiducial locations. 
 
+% Future work, may rely on automatic fiducial localization \cite{belhumeur2011localizing}, or on naturally ocurring features (e.g. SIFT features \cite{lowe}) as in \cite{ohayon2006robust}.
+Future work may replicate these results on real images.
+We may also investigate automatic fiducial localization \cite{belhumeur2011localizing}, or naturally ocurring features such as in \cite{ohayon2006robust}.
+Finally, we may estimate more general poses, such as the full extrinsic camera parameters.
 
 \bibliographystyle{splncs}
 \bibliography{library}

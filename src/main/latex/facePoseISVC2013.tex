@@ -145,7 +145,8 @@ The geometric configuration of fiducial features does vary from face to face, bu
 Figure \ref{fig:fiducial_clusters}(a-c) shows point clouds of three different faces taken from the GavaBDB \cite{moreno2004gavabdb} dataset. 
 Manually clicked fiducial locations are marked with large red dots.
 \ericnote{Descriptions for how to interpret figures should be moved to captions.}
-Figure \ref{fig:fiducial_clusters}(c) shows fiducials for 20 different faces, note the fiducials form clusters.  
+Figure \ref{fig:fiducial_clusters}(c) shows fiducials for 20 different faces.  Fiducials were aligned by subtracting their respective means.  
+Note the fiducials form clusters.  
 We take advantage of this and use a set of exemplar 3D heads to estimate the camera pose (in particular distance between camera and head) of face images in general. 
 We show that using exemplar heads allows us to accurately estimate the camera pose and distance from camera to the head.
 
@@ -167,7 +168,7 @@ We show that using exemplar heads allows us to accurately estimate the camera po
 In all experiments, we use the Texas 3D Face Recognition Database (Texas 3DFRD) \cite{gupta2010texas}, see figure \ref{fig:t3dfrd}.  
 This database is a collection of 1149 pairs of frontal facial color and range images of 105 adult human subjects.  
 Each face also has 25 manually labeled anthropometric facial fiducial points.  
-Color and range images were captured simultaneously and are thus perfectly registered to each other.  
+Color and range images were captured simultaneously and are perfectly registered to each other.  
 This allows us to have ground truth 3D locations of the fiducial locations.  
 \begin{figure}[h]
 \centering
@@ -179,17 +180,17 @@ In this work, we are primarily interested in recovering the distance between cam
 
 \begin{itemize}
 \item Project fiducials for a test individual onto an image plane.
-\item Use 3D fiducial locations for other individuals as exemplars.
+\item Use 3D fiducial locations from a set of reference individuals (not including the test individual) as exemplars.
 \item For each exemplar, estimate the camera pose (and distance) using \EPnP.
 \item Final estimate is the average from all exemplars.
-\item Repeat while simulating a dolly-zoom camera movement (move camera back, increase focal length).  
+\item Repeat while simulating a dolly-zoom (or Hitchcock zoom) camera movement (move camera back, increase focal length).  
 \end{itemize}
 
 We perform this experiment for the frontal and $3/4$ profile view of the face.  
 For the frontal case, we assume all fiducials are visible to the camera.  
 For the $3/4$ we assume only a subset of the fiducials are visible. 
 In this work, we assume we have a calibrated camera and all intrinsic camera parameters are known.  
-Simulated camera distances range from approximately 10cm to 300cm.
+Simulated camera distances range from approximately $10$cm to $3$m.
 
 Note the distance of camera to the face could be trivially estimated by the size of the imaged face if we did not adjust the focal length. 
 The focal length is adjusted to keep the outermost fiducials at a near constant distance, which also keeps the imaged face silhouette at a constant size.
@@ -214,11 +215,11 @@ We test $20$ camera positions and corresponding focal length to keep distance be
 \label{fig:results}
 \end{figure}
 
-Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with different numbers of fiducials used in the \EPnP~algorithm.  For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  This figure shows the distance can be reliably estimated with as little as $10$ fiducials.  When using only five fiducials, the distance estimate becomes less accurate.  
+Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with different numbers of fiducials used in the \EPnP~algorithm.  For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  This figure shows the distance can be reliably estimated with as little as five fiducials.  In the case of five fiducials, the fiducials used were outer corners of eyes and mouth, and center of top lip.  When using only four fiducials, the center of top lip was removed, resulting in 4 nearly co-planar points.  At this point, the distance estimate becomes unreliable.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.7\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
+\includegraphics[width=.8\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
 \caption{Error bars of camera distance for the frontal view using different numbers of fiducials.}
 \label{fig:error_bar_frontal_lessfiducials}
 \end{figure}
@@ -228,9 +229,9 @@ Let $p_{ij}'$ be the imaged fiducial using the estimated camera position from th
 We use $\argmin_j \sum_i \|p_i - p_{ij}'\|$ as a heuristic to select the best exemplar. 
 See Figure \ref{fig:bestexemplar} for some illustrative examples.  
 In these examples, it is interesting to see what can be recovered by simply using fiducial geometry.  
-Top row whos best exemplar matches the gender of the probe image.  
+Top row shows best exemplar matches the gender of the probe image.  
 Second row shows similar race in two out of three cases.  
-In all cases, the general face of the image is recovered.
+In all cases, the general shape of the image is returned in the best matching exemplar.\afbnote{add more interesting commentary here}.
 
 \begin{figure}[h]
 \centering
@@ -240,7 +241,7 @@ In all cases, the general face of the image is recovered.
 \includegraphics[width=.7\linewidth]{resources/figures/best_exemplar10.png} \\
 \includegraphics[width=.7\linewidth]{resources/figures/best_exemplar26.png}
 \end{tabular}
-\caption{Best exemplar face using a simple heuristic.}
+\caption{Best exemplar face using a heuristic of Sum of Squared error between imaged 2d fiducial points from true camera position and estimated camera position.  In each row, left column shows a probe image followed by its best matching exemplar at different camera distances. Distances (or camera positions) one, ten, and twenty correspond to physical distances of 10cm, 75cm, and 300cm, respectively. }
 \label{fig:bestexemplar}
 \end{figure}
 
@@ -252,7 +253,7 @@ Providing an estimate of this distance can be used to mitage the effects of pers
 In this paper, we have used a dataset consisting of facial range images with manually labelled fiducials.    
 Furthermore we assume an ideal pinhole camera model and we control the pose of both head and camera.  
 This simplifies the problem since we have accurate ground truth 2D and 3D fiducial locations. 
-For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}.    
+For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}, or naturally ocurring features (e.g. SIFT features \cite{lowe} as in \cite{ohayon2006robust}.    
 
 \bibliographystyle{splncs}
 \bibliography{library}

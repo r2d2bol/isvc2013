@@ -9,6 +9,8 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{color}
+\usepackage{amsmath}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
 \newcommand {\afbnote} [1] {{\bf \textcolor{red}{(#1)}}}
 \newcommand {\ericnote} [1] {{\bf \textcolor{magenta}{(#1)}}}
 \newcommand {\PnP} {P$n$P}
@@ -68,7 +70,7 @@ Section \ref{sec:discussion} is the discussion.
 \includegraphics[width=.33\linewidth]{resources/figures/fiducial_migration.png}
 \end{tabular}
 \caption{
-\ericnote{TODO: Label each image with its camera distance. TODO: Make the red dots larger.}
+\ericnote{TODO: Label each image with its camera distance.}
 A synthetic head viewed from different camera distances, illustrating projective distortion.
 Camera distance decreases in the first eight images, indexed in row-major order.
 Here, the focal length (zoom) is adjusted to keep the figure at a constant size.
@@ -191,14 +193,14 @@ Simulated camera distances range from approximately 10cm to 300cm.
 Note the distance of camera to the face could be trivially estimated by the size of the imaged face if we did not adjust the focal length. 
 The focal length is adjusted to keep the outermost fiducials at a near constant distance, which also keeps the imaged face silhouette at a constant size.
 
-Figure \ref{fig:results} shows results of camera pose estimation and distance from camera to head for the frontal and $3/4$ profile views.  The true and estimated camera distances represent the distance between the camera center and tip of the nose.  The distance is reported in centimeters using an estimate for the average distance between outermost fiducial markers ($12$ cm). Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  This is specially true for the $3/4$ profile view.   
+Figure \ref{fig:results} shows results of camera pose estimation and distance from camera to head for the frontal and $3/4$ profile views.  Figure \ref{fig:results} (a,c) qualitatively show the estimated camera pose.  The true and estimated camera distances (Figure \ref{fig:results}(b,d) )represent the distance between the camera center and tip of the nose.  The distance is reported in centimeters using an estimate for the average distance between outermost fiducial markers ($12$ cm). Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  This is specially true for the $3/4$ profile view, presumably due to fewer number of visible fiducials.   
 \begin{figure}[ht]
 \begin{tabular}{cc}
-\includegraphics[width=.45\linewidth]{resources/figures/cameraloc_frontal.png} &
-\includegraphics[width=.45\linewidth]{resources/figures/errorbar_frontal.png} \\
+\includegraphics[width=.5\linewidth]{resources/figures/cameraloc_frontal.png} &
+\includegraphics[width=.5\linewidth]{resources/figures/errorbar_frontal.png} \\
 (a) & (b) \\
-\includegraphics[width=.45\linewidth]{resources/figures/cameraloc_3q.png} &
-\includegraphics[width=.45\linewidth]{resources/figures/errorbar_3q.png} \\
+\includegraphics[width=.5\linewidth]{resources/figures/cameraloc_3q.png} &
+\includegraphics[width=.5\linewidth]{resources/figures/errorbar_3q.png} \\
 (c) & (d)
 \end{tabular}
 \caption{	
@@ -215,15 +217,36 @@ Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.5\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
+\includegraphics[width=.7\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
 \caption{Error bars of camera distance for the frontal view using different numbers of fiducials.}
 \label{fig:error_bar_frontal_lessfiducials}
 \end{figure}
 
-\afbnote{todo: Show results for larger simulated distances}
+For qualitative analysis, we use a heuristic to select a ``best'' exemplar.  Let $p_i$ be the 2D imaged fiducial using the true camera position.  
+Let $p_{ij}'$ be the imaged fiducial using the estimated camera position from the $j$-th exemplar.
+We use $\argmin_j \sum_i \|p_i - p_{ij}'\|$ as a heuristic to select the best exemplar. 
+See Figure \ref{fig:bestexemplar} for some illustrative examples.  
+In these examples, it is interesting to see what can be recovered by simply using fiducial geometry.  
+Top row whos best exemplar matches the gender of the probe image.  
+Second row shows similar race in two out of three cases.  
+In all cases, the general face of the image is recovered.
 
-\section{Conclusion}
-\afbnote{todo... .  Mention that for this paper we focus on calibrated camera (known intrinsic parameters).  Future work will include uncalibrated case, other methods (appearance based), etc.}
+\begin{figure}[h]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar1.png} \\
+\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar3.png} \\
+\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar10.png} \\
+\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar26.png}
+\end{tabular}
+\caption{Best exemplar face using a simple heuristic.}
+\label{fig:bestexemplar}
+\end{figure}
+
+\section{Conclusion and future work}
+We have shown a method for estimating the distance from camera to a previously unseen face using correspondences of 2D imaged fiducials to 3D fiducial locations on exemplar heads.  The distance estimate is accurate in distances ranging from 10cm to 300 cm for the frontal and $3/4$ profile views.  Providing an estimate of this distance can be used to mitage the effects of perspective distortion in face recognition.  
+
+In this paper, we have used a dataset consisting of facial range images with manually labelled fiducials.    Furthermore we assume an ideal pinhole camera model and we control the pose of both head and camera.  This simplifies the problem since we have accurate ground truth 2D and 3D fiducial locations. For future work, we plan to use methods for detecting fiducials such as \cite{belhumeur2011localizing}.    
 
 \bibliographystyle{splncs}
 \bibliography{library}

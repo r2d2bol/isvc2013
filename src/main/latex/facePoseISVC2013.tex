@@ -41,14 +41,14 @@
 When photographing a human head, the subject's appearance can vary dramatically depending on the camera's distance from the subject.
 This variation is caused by perspective distortion, and for 3D objects cannot be undone by simply adjusting focal length; see Figure \ref{fig:fiducial_migration} for an illustration using a synthetic head\footnote{Generated using FaceGen (\url{http://www.facegen.com}).}.
 
-This distortion is evidently a problem for automatic cross-condition face recognition, e.g. webcam-based recognition from social media images.
+This distortion presents a problem for automatic cross-condition face recognition, e.g. webcam-based recognition from social media images.
 Even humans find such recognition difficult \cite{liu2003face,liu2006face}.
 It is also a source of information, allowing camera pose estimation in cases where the subject is known \cite{ohayon2006robust}.
 This information could potentially be used to undistort the images and improve recognition results.
 
 In this paper, we show camera distance estimation from 2D images is possible even when the subject is previously unseen.
 Our technique replaces the known-subject assumption with knowledge of the general distribution of fiducials across people.
-This distribution turns out to be sufficiently tight to allow precise distance estimation using only a small training set.
+This distribution turns out to be sufficiently tight to allow surprisingly accurate distance estimation using only a small training set.
 
 The paper is organized as follows.
 Section \ref{sec:related} covers related work from psychology and computer vision.
@@ -105,24 +105,25 @@ The study involved a training phase in which face images were displayed to a hum
 In a later recognition phase the subject was shown images of faces and asked to determine whether each face had been previously displayed.
 The field of view was changed to see if this had an effect on recognition. 
 Their results show that even humans have a hard time recognizing a face when viewed under different levels of perspective distortion.  
-This is a motivating factor since if human have trouble with this task, a computer vision algorithm will likely also have the same troubles.  
+This is a motivating factor since if humans have trouble with this task, a computer vision algorithm will likely also have the same troubles.  
 Predicting the distance between camera and face is a first step in mitigating the effects of perspective distortion.
 
 A similar psychology based studied is presented in \cite{perona2007new,bryan2012perspective}. 
 Here, Perona et al. investigate the effects of perspective distortion as visual cue for social judgement of faces.  
 Human subjects were asked to judge an image of a face in terms of trustworthiness, attractiveness, and competence.  
-Their results show that for social judgements, pictures taken from a distance inside personal space (up close) are generally rated lower, while pictures taken at a far distance have higher ratings.
+Their results show that for social judgements, pictures taken up close are generally rated lower, while pictures taken far away have higher ratings.
 
 In automatic camera calibration, camera parameters are recovered using prior information about the imaged scene.
-In \cite{deutscher}, Deutscher et al. recover camera parameteres under the assumption the scene satisfies a Manhattan world criterion.
+In \cite{deutscher2002automatic}, Deutscher et al. recover camera parameters under the assumption the scene satisfies a Manhattan world criterion.
 This is similar to our technque, which assumes human fiducial locations are approximately distributed according to an estimated distribution. 
-In \cite{lv2006}, Lv et al. use a human subject for calibration, but unlike this work requires multiple frames of video.
+In \cite{lv2006camera}, Lv et al. use a human subject for calibration, but unlike this work requires multiple frames of video.
+In \cite{krahnstoever2005bayesian}, Krahnstoever and Mendonca use a full human body for calibration from a single image, where this work uses just the head.
 
 In \cite{ohayon2006robust}, Ohayon and Rivlin present head tracking as a camera pose estimation problem.  
 Prior to head tracking, 3D points are acquired from the head.  
 During tracking, correspondences between the 3D points and their imaged 2D points are used to estimate head pose by solving the inverse problem, namely camera pose. 
 They use the Perspective $n$-Point (\PnP) formulation to solve for the camera extrinsic parameters (rotation $R$ and translation $T$).  
-The \PnP method is also known as the Location Determination Problem and was first coined in \cite{ransac}.  
+The \PnP~method is also known as the Location Determination Problem and was first coined in \cite{ransac}.  
 In effect, the human head is used as a calibration rig.  
 In this paper, the authors show that head pose can be accurately estimated and tracked under varying yaw, pitch, and roll and translations about $x$ and $y$ axes. 
 However, they assume knowledge of the ground-truth fiducial locations and do not address dramatic changes in camera distance.
@@ -134,9 +135,9 @@ Our work is based on \cite{ohayon2006robust}, but we focus primarily on translat
 We present a method for estimating the pose of a previously unseen human head using a dataset of exemplar human heads. 
 
 \subsection{Efficient Perspective $n$-Point (\EPnP)}
-\EPnP is a non-iterative solution to the \PnP problem.  
-As stated earlier, the \PnP problem estimates the pose of a calibrated camera from $n$ 3D-to-2D correspondences.  
-The advantage of \EPnP is that the computational complexity grows linearly with $n$, whereas other state-of-the-art methods are $O(n^5)$ or even $O(n^8)$.  
+\EPnP~is a non-iterative solution to the \PnP problem.  
+As stated earlier, the \PnP~problem estimates the pose of a calibrated camera from $n$ 3D-to-2D correspondences.  
+The advantage of \EPnP~is that the computational complexity grows linearly with $n$, whereas other state-of-the-art methods are $O(n^5)$ or even $O(n^8)$.  
 We use Matlab code provided by the authors \footnote{\url{http://cvlab.epfl.ch/software/EPnP}}.
 
 \subsection{Exemplar 3D heads}
@@ -213,7 +214,7 @@ We test $20$ camera positions and corresponding focal length to keep distance be
 \label{fig:results}
 \end{figure}
 
-Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with different numbers of fiducials used in the \EPnP algorithm.  For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  This figure shows the distance can be reliably estimated with as little as $10$ fiducials.  When using only five fiducials, the distance estimate becomes less accurate.  
+Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with different numbers of fiducials used in the \EPnP~algorithm.  For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  This figure shows the distance can be reliably estimated with as little as $10$ fiducials.  When using only five fiducials, the distance estimate becomes less accurate.  
 
 \begin{figure}[h]
 \centering

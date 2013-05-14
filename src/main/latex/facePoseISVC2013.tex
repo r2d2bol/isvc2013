@@ -70,7 +70,6 @@ Section \ref{sec:discussion} is the discussion.
 \includegraphics[width=.33\linewidth]{resources/figures/fiducial_migration.png}
 \end{tabular}
 \caption{
-\ericnote{TODO: Label each image with its camera distance.}
 A synthetic head viewed from different camera distances, illustrating projective distortion.
 Camera distance decreases in the first eight images, indexed in row-major order.
 Here, the focal length (zoom) is adjusted to keep the figure at a constant size.
@@ -100,7 +99,7 @@ In this paper, we assume these parameters are known and estimate camera distance
 \label{fig:head_pose}
 \end{figure}
 
-In \cite{liu2003face,liu2006face}, Liu studies the effect of face recognition by humans when viewing faces at different perspective convergence angles (effectively focal length or field of view). 
+In \cite{liu2003face,liu2006face}, Liu et al. study the effect of face recognition by humans when viewing faces at different perspective convergence angles (effectively focal length or field of view). 
 The study involved a training phase in which face images were displayed to a human test subject.
 In a later recognition phase the subject was shown images of faces and asked to determine whether each face had been previously displayed.
 The field of view was changed to see if this had an effect on recognition. 
@@ -128,7 +127,7 @@ In effect, the human head is used as a calibration rig.
 In this paper, the authors show that head pose can be accurately estimated and tracked under varying yaw, pitch, and roll and translations about $x$ and $y$ axes. 
 However, they assume knowledge of the ground-truth fiducial locations and do not address dramatic changes in camera distance.
 
-\section{Camera pose estimation from face images using \EPnP}
+\section{Camera pose estimation from face images using \EPnP} \label{sec:method}
 
 Our work is based on \cite{ohayon2006robust}, but we focus primarily on translation along the $z$-axis, which affects the level of induced perspective distortion.  
 % Furthermore, Ohayon and Rivlin present a method for estimating head pose of a specific human head.  
@@ -164,7 +163,7 @@ We show that using exemplar heads allows us to accurately estimate the camera po
 \label{fig:fiducial_clusters}
 \end{figure}
 
-\section{Experimental setup}
+\section{Experimental setup} \label{sec:experiments}
 In all experiments, we use the Texas 3D Face Recognition Database (Texas 3DFRD) \cite{gupta2010texas}, see figure \ref{fig:t3dfrd}.  
 This database is a collection of 1149 pairs of frontal facial color and range images of 105 adult human subjects.  
 Each face also has 25 manually labeled anthropometric facial fiducial points.  
@@ -245,7 +244,7 @@ In all cases, the general shape of the image is returned in the best matching ex
 \label{fig:bestexemplar}
 \end{figure}
 
-\section{Conclusion and future work}
+\section{Conclusion and future work} \label{sec:discussion}
 We have shown a method for estimating the distance from camera to a previously unseen face using correspondences of 2D imaged fiducials to 3D fiducial locations on exemplar heads.  
 The distance estimate is accurate in distances ranging from 10cm to 300 cm for the frontal and $3/4$ profile views.  
 Providing an estimate of this distance can be used to mitage the effects of perspective distortion in face recognition.  

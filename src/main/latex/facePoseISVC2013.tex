@@ -128,38 +128,42 @@ In this paper, the authors show that head pose can be accurately estimated and t
 However, they assume knowledge of the ground-truth fiducial locations and do not address dramatic changes in camera distance.
 
 \section{Camera pose estimation from face images using \EPnP} \label{sec:method}
-
 Our work is based on \cite{ohayon2006robust}, but we focus primarily on translation along the $z$-axis, which affects the level of induced perspective distortion.  
-% Furthermore, Ohayon and Rivlin present a method for estimating head pose of a specific human head.  
 We present a method for estimating the pose of a previously unseen human head using a dataset of exemplar human heads. 
 
-\subsection{Efficient Perspective $n$-Point (\EPnP)}
-\EPnP~is a non-iterative solution to the \PnP problem.  
-As stated earlier, the \PnP~problem estimates the pose of a calibrated camera from $n$ 3D-to-2D correspondences.  
-The advantage of \EPnP~is that the computational complexity grows linearly with $n$, whereas other state-of-the-art methods are $O(n^5)$ or even $O(n^8)$.  
-We use Matlab code provided by the authors \footnote{\url{http://cvlab.epfl.ch/software/EPnP}}.
+\textit{Efficient Perspective $n$-Point (\EPnP):} The method uses \EPnP, a fast, non-iterative, solution to the \PnP~problem \cite{lepetit2009epnp}.  
+We use code provided by the authors\footnote{\url{http://cvlab.epfl.ch/software/EPnP}}.
+As stated earlier, the \PnP~problem is to estimate the pose of a calibrated camera from $n$ 3D-to-2D correspondences.
+In particular, \EPnP~enables us to estimate camera pose based on a set of 2D fiducial locations and their corresponding 3D locations.
+% The advantage of \EPnP~is that the computational complexity grows linearly with $n$, whereas other state-of-the-art methods are $O(n^5)$ or even $O(n^8)$.  
 
-\subsection{Exemplar 3D heads}
-The geometric configuration of fiducial features does vary from face to face, but in general fiducial locations tend to form clusters, as illustrated in Figure \ref{fig:fiducial_clusters}.  
-Figure \ref{fig:fiducial_clusters}(a-c) shows point clouds of three different faces taken from the GavaBDB \cite{moreno2004gavabdb} dataset. 
-Manually clicked fiducial locations are marked with large red dots.
-\ericnote{Descriptions for how to interpret figures should be moved to captions.}
-Figure \ref{fig:fiducial_clusters}(c) shows fiducials for 20 different faces.  Fiducials were aligned by subtracting their respective means.  
-Note the fiducials form clusters.  
-We take advantage of this and use a set of exemplar 3D heads to estimate the camera pose (in particular distance between camera and head) of face images in general. 
-We show that using exemplar heads allows us to accurately estimate the camera pose and distance from camera to the head.
+\textit{Exemplar 3D heads:} Note the geometric configuration of fiducial features varies from face to face, but in general fiducial locations tend to form clusters, as illustrated in Figure \ref{fig:fiducial_clusters}.
+This means the fiducial locations of a new person are likely to be similar to those in an exemplar set.
+We take advantage of this by using a set of exemplar 3D heads to estimate the camera pose of a novel head.
+
+\textit{The method:} The method is based on simple averaging, leveraging the observation from the previous paragraph.
+Suppose we get an image $I$ of a previously unobserved head.
+For each exemplar 3D head $E$, the camera pose is estimated via \EPnP~under the assumption the fiducials of $I$ match the fiducials of $E$.
+This assumption is incorrect, but as mentioned in the last paragraph, it is not far off.
+The estimated camera distance for $I$ is just the average of the camera distances across all the exemplars.
 
 \begin{figure}[h]
 \centering
 \begin{tabular}{cc}
-\includegraphics[width=.3\linewidth]{resources/figures/face1.png} &
-\includegraphics[width=.3\linewidth]{resources/figures/face2.png} \\
+\includegraphics[width=.4\linewidth]{resources/figures/face1.png} &
+\includegraphics[width=.4\linewidth]{resources/figures/face2.png} \\
 (a) & (b) \\
-\includegraphics[width=.3\linewidth]{resources/figures/face3.png} &
-\includegraphics[width=.5\linewidth]{resources/figures/fiducial_clusters.png} \\
+\includegraphics[width=.4\linewidth]{resources/figures/face3.png} &
+\includegraphics[width=.6\linewidth]{resources/figures/fiducial_clusters.png} \\
 (c) & (d)
 \end{tabular}
-\caption{(a-b) 3D point clouds of three different faces along with manually clicked fiducials.  (c) Fiducials from 20 faces.}
+\caption{
+(a-c) show point clouds of three different faces taken from the GavaBDB \cite{moreno2004gavabdb} dataset. 
+Manually clicked fiducial locations are marked with red dots.
+(d) shows fiducials for 20 different faces, aligned by subtracting their respective means.  
+Note the fiducials form tight clusters, meaning fiducials do not change dramatically across individuals.
+This phenomenon enables robust depth estimation even for previously unseen images.
+}
 \label{fig:fiducial_clusters}
 \end{figure}
 
@@ -180,9 +184,8 @@ In this work, we are primarily interested in recovering the distance between cam
 \begin{itemize}
 \item Project fiducials for a test individual onto an image plane.
 \item Use 3D fiducial locations from a set of reference individuals (not including the test individual) as exemplars.
-\item For each exemplar, estimate the camera pose (and distance) using \EPnP.
-\item Final estimate is the average from all exemplars.
-\item Repeat while simulating a dolly-zoom (or Hitchcock zoom) camera movement (move camera back, increase focal length).  
+\item For each exemplar, estimate the camera distance using the method described in Section \ref{sec:method}.
+\item Repeat while simulating a dolly-zoom (or Hitchcock zoom) camera movement, in which the camera moves away as focal length is increased to keep the figure size constant.
 \end{itemize}
 
 We perform this experiment for the frontal and $3/4$ profile view of the face.  

@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-We present a method for estimating the distance between camera and head in 2D images from a calibrated camera.  The distance is estimated by solving for the camera pose using Effictive Perspective $n$ Point (EP$n$P).  Leading head pose estimation algorithms focus mainly on head orientation (yaw, pitch, and roll) and translations perpendicular to the camera principal axis.  Our contribution is a system which can estimate head pose under large translations parallel to the camera's principal axis.  Our method uses a set of exemplar 3D human heads to estimate the distance between camera and a previously unseen head.  Results are validated using the Texas 3D Recognition Database.
+We present a method for estimating the distance between a camera and a human head in 2D images from a calibrated camera.  The distance is estimated by solving for the camera pose using Effective Perspective $n$ Point (EP$n$P).  Leading head pose estimation algorithms focus mainly on head orientation (yaw, pitch, and roll) and translations perpendicular to the camera principal axis.  Our contribution is a system that can estimate head pose under large translations parallel to the camera's principal axis.  Our method uses a set of exemplar 3D human heads to estimate the distance between a camera and a previously unseen head.  We present promising experimental results using the Texas 3D Face Recognition Database.
 \end{abstract}
 
 \section{Introduction}
@@ -74,10 +74,10 @@ A synthetic head viewed from different camera distances, illustrating projective
 Camera distance decreases in the first eight images, indexed in row-major order.
 Here, the focal length (zoom) is adjusted to keep the figure at a constant size.
 Fiducials are shown as red dots.
-In the first image, the camera is a far distance, resulting in near orthographic projection.
-In the eighth image (bottom row, middle column) the camera is very close to the human head, resulting in an elongated face and protruding nose.  
+In the first image, the camera is far away, resulting in near orthographic projection.
+In the eighth image (bottom row, middle column) the camera is very close to the human head.  
 The last image is the same as the first, but with fiducial markers from all images.
-This illustrates the migration of fiducials as a function of camera distance. 
+This illustrates the migration of fiducials as a function of camera distance and focal length. 
 } 
 \label{fig:fiducial_migration}
 \end{figure}

@@ -29,12 +29,17 @@
 
 \title{Camera pose from face images}
 
-\titlerunning{Estimating the distance between a camera and head using a single 2d image}
+\titlerunning{Camera distance from face images}
 
 \maketitle
 
 \begin{abstract}
-We present a method for estimating the distance between a camera and a human head in 2D images from a calibrated camera.  The distance is estimated by solving for the camera pose using Effective Perspective $n$ Point (EP$n$P).  Leading head pose estimation algorithms focus mainly on head orientation (yaw, pitch, and roll) and translations perpendicular to the camera principal axis.  Our contribution is a system that can estimate head pose under large translations parallel to the camera's principal axis.  Our method uses a set of exemplar 3D human heads to estimate the distance between a camera and a previously unseen head.  We present promising experimental results using the Texas 3D Face Recognition Database.
+We present a method for estimating the distance between a camera and a human head in 2D images from a calibrated camera.
+Leading head pose estimation algorithms focus mainly on head orientation (yaw, pitch, and roll) and translations perpendicular to the camera principal axis.
+Our contribution is a system that can estimate head pose under large translations parallel to the camera's principal axis.
+Our method uses a set of exemplar 3D human heads to estimate the distance between a camera and a previously unseen head.
+The distance is estimated by solving for the camera pose using Effective Perspective $n$-Point (EP$n$P).  
+We present promising experimental results using the Texas 3D Face Recognition Database.
 \end{abstract}
 
 \section{Introduction}

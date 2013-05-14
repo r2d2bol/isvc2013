@@ -173,7 +173,7 @@ In this section, we show the surprising effectiveness of our method for estimati
 Our experiments are run against the Texas 3D Face Recognition Database (Texas 3DFRD) \cite{gupta2010texas}; example images are shown in Figure \ref{fig:t3dfrd}.  
 This database is a collection of 1149 pairs of frontal face color and depth images of 105 adult human subjects.  
 Each face also has 25 manually labeled anthropometric facial fiducial points.  
-Color and range images were captured simultaneously and are perfectly coregistered.  
+Color and depth images were captured simultaneously and are perfectly coregistered.  
 This provides ground truth 3D locations of the fiducial locations.  
 
 \begin{figure}[h]
@@ -186,11 +186,11 @@ These images show the 25 fiducials labeled for each face, as well as example dep
 \label{fig:t3dfrd}
 \end{figure}
 
-Our experiments consist of the following:
+Our first experiment consists of the following:
 \begin{itemize}
-\item Project fiducials for a test individual onto an image plane.
+\item Project fiducials for a test subject onto an image plane.
 \item Use 3D fiducial locations from a set of reference individuals (not including the test individual) as exemplars.
-\item For each exemplar, estimate the camera distance using the method described in Section \ref{sec:method}.
+\item Estimate the camera distance for the test subject using the method described in Section \ref{sec:method}.
 \item Repeat while simulating a dolly-zoom (or Hitchcock zoom) camera movement, in which the camera moves away as focal length is increased to keep the figure size constant.
 \end{itemize}
 
@@ -226,9 +226,9 @@ Results of camera pose and distance estimation for the frontal and $3/4$ profile
 The clusters of poses for each of the three distances are marked using cyan, magenta, and green camera frames, with the ground truth pose marked in red.
 (b) and (d) show true and estimated camera distances as a function of camera position, where distance is measured from the camera center to the tip of the nose.
 We test $20$ camera positions.
-The estimated distances are shown with error bars to represent the variation across exemplars.
+The estimated distances are shown with error bars to represent the variation across test subjects.
 Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  
-This is especially true for the $3/4$ profile view, presumably due to fewer number of visible fiducials.   
+This is especially true for the $3/4$ profile view, presumably due to a fewer number of visible fiducials.   
 %  Camera pose estimation results for the frontal case.  
 % True camera position is the solid red axis.  
 % Estimated camera positions for near/medium/far are shown in cyan/magenta/green respectively.   
@@ -251,30 +251,37 @@ At this point, the distance estimate becomes unreliable.
 \includegraphics[width=1\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
 \caption{
 Results of camera distance estimation for the frontal view for varying numbers of fiducials.
-As in Figure \ref{fig:results}, error bars represent the variation in estimated distance across exemplars, but the actual estimate is the mean.
+As in Figure \ref{fig:results}, error bars represent the variation in estimated distance across test subjects.
 This shows distance can be reliably estimated with as few as five fiducials.
 }
 \label{fig:error_bar_frontal_lessfiducials}
 \end{figure}
 
-For qualitative analysis, we use a heuristic to select a ``best'' exemplar.  Let $p_i$ be the 2D imaged fiducial using the true camera position.  
+For qualitative analysis, we use a heuristic to select a closest exemplar for each subject and camera distance.  
+Let $p_i$ be the 2D imaged fiducial using the true camera position.  
 Let $p_{ij}'$ be the imaged fiducial using the estimated camera position from the $j$-th exemplar.
 We use $\argmin_j \sum_i \|p_i - p_{ij}'\|$ as a heuristic to select the best exemplar. 
-See Figure \ref{fig:bestexemplar} for some illustrative examples.  
-In these examples, it is interesting to see what can be recovered by simply using fiducial geometry.  
-Top row shows best exemplar matches the gender of the probe image.  
-Second row shows similar race in two out of three cases.  
-In all cases, the general shape of the image is returned in the best matching exemplar.\afbnote{add more interesting commentary here}.
+See Figure \ref{fig:bestexemplar} for some illustrative examples.
+These examples show fiducial configuration is more than just a means to undistort images; it is a source of biometric information in its own right.
+% In these examples, it is interesting to see what can be recovered by simply using fiducial geometry.  
+% Top row shows best exemplar matches the gender of the probe image.  
+% Second row shows similar race in two out of three cases.  
+% In all cases, the general shape of the image is returned in the best matching exemplar.\afbnote{add more interesting commentary here}.
 
-\begin{figure}[h]
+\begin{figure}[ht!]
 \centering
 \begin{tabular}{cc}
-\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar1.png} \\
-\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar3.png} \\
-\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar10.png} \\
-\includegraphics[width=.7\linewidth]{resources/figures/best_exemplar26.png}
+\includegraphics[width=1\linewidth]{resources/figures/best_exemplar1.png} \\
+\includegraphics[width=1\linewidth]{resources/figures/best_exemplar3.png} \\
+\includegraphics[width=1\linewidth]{resources/figures/best_exemplar10.png} \\
+\includegraphics[width=1\linewidth]{resources/figures/best_exemplar26.png}
 \end{tabular}
-\caption{Best exemplar face using a heuristic of Sum of Squared error between imaged 2d fiducial points from true camera position and estimated camera position.  In each row, left column shows a probe image followed by its best matching exemplar at different camera distances. Distances (or camera positions) one, ten, and twenty correspond to physical distances of 10cm, 75cm, and 300cm, respectively. }
+\caption{
+The closest exemplar as a function of camera distance for four subjects (probes).
+The probes are shown in the first column.
+The best exemplars for 10cm, 75cm, and 300cm are shown in the second, third, and fourth columns, respectively.
+Note the probes tend to match exemplars with similar attributes, e.g. race and gender.
+}
 \label{fig:bestexemplar}
 \end{figure}
 

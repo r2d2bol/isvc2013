@@ -168,19 +168,25 @@ This phenomenon enables robust depth estimation even for previously unseen image
 \end{figure}
 
 \section{Experimental setup} \label{sec:experiments}
-In all experiments, we use the Texas 3D Face Recognition Database (Texas 3DFRD) \cite{gupta2010texas}, see figure \ref{fig:t3dfrd}.  
-This database is a collection of 1149 pairs of frontal facial color and range images of 105 adult human subjects.  
+In this section, we show the surprising effectiveness of our method for estimating camera distance in images of previously unseen subjects.
+
+Our experiments are run against the Texas 3D Face Recognition Database (Texas 3DFRD) \cite{gupta2010texas}; example images are shown in Figure \ref{fig:t3dfrd}.  
+This database is a collection of 1149 pairs of frontal face color and depth images of 105 adult human subjects.  
 Each face also has 25 manually labeled anthropometric facial fiducial points.  
-Color and range images were captured simultaneously and are perfectly registered to each other.  
-This allows us to have ground truth 3D locations of the fiducial locations.  
+Color and range images were captured simultaneously and are perfectly coregistered.  
+This provides ground truth 3D locations of the fiducial locations.  
+
 \begin{figure}[h]
 \centering
-\includegraphics[width=.7\linewidth]{resources/figures/t3dfr.jpg}
-\caption{Example images from the Texas 3DFRD.}
+\includegraphics[width=1\linewidth]{resources/figures/t3dfr.jpg}
+\caption{
+Example images from the Texas 3DFRD, a database of 3D scans of human faces.
+These images show the 25 fiducials labeled for each face, as well as example depth maps.
+}
 \label{fig:t3dfrd}
 \end{figure}
-In this work, we are primarily interested in recovering the distance between camera and head.  Our experiments consist of the following:
 
+Our experiments consist of the following:
 \begin{itemize}
 \item Project fiducials for a test individual onto an image plane.
 \item Use 3D fiducial locations from a set of reference individuals (not including the test individual) as exemplars.
@@ -191,14 +197,21 @@ In this work, we are primarily interested in recovering the distance between cam
 We perform this experiment for the frontal and $3/4$ profile view of the face.  
 For the frontal case, we assume all fiducials are visible to the camera.  
 For the $3/4$ we assume only a subset of the fiducials are visible. 
-In this work, we assume we have a calibrated camera and all intrinsic camera parameters are known.  
+We also assume we have a calibrated camera and all intrinsic camera parameters are known.  
 Simulated camera distances range from approximately $10$cm to $3$m.
+Note if we did not adjust the focal length, the distance from the camera to the face could be trivially estimated by the size of the imaged face. 
+For this reason, the focal length is adjusted to keep the outermost fiducials at a near constant distance, which also keeps the imaged face silhouette at a constant size.
+Results are shown in Figure \ref{fig:results}.
+Our method nearly perfectly recovers camera distance.
 
-Note the distance of camera to the face could be trivially estimated by the size of the imaged face if we did not adjust the focal length. 
-The focal length is adjusted to keep the outermost fiducials at a near constant distance, which also keeps the imaged face silhouette at a constant size.
+% Figure \ref{fig:results} shows results of camera pose estimation and distance from camera to head for the frontal and $3/4$ profile views.  
+% Figure \ref{fig:results} (a,c) qualitatively show the estimated camera pose.  
+% The true and estimated camera distances (Figure \ref{fig:results}(b,d)) represent the distance between the camera center and tip of the nose.  
+% The distance is reported in centimeters using an estimate for the average distance between outermost fiducial markers ($12$ cm).
+% Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  
+% This is especially true for the $3/4$ profile view, presumably due to fewer number of visible fiducials.   
 
-Figure \ref{fig:results} shows results of camera pose estimation and distance from camera to head for the frontal and $3/4$ profile views.  Figure \ref{fig:results} (a,c) qualitatively show the estimated camera pose.  The true and estimated camera distances (Figure \ref{fig:results}(b,d) )represent the distance between the camera center and tip of the nose.  The distance is reported in centimeters using an estimate for the average distance between outermost fiducial markers ($12$ cm). Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  This is specially true for the $3/4$ profile view, presumably due to fewer number of visible fiducials.   
-\begin{figure}[ht]
+\begin{figure}[ht!]
 \begin{tabular}{cc}
 \includegraphics[width=.5\linewidth]{resources/figures/cameraloc_frontal.png} &
 \includegraphics[width=.5\linewidth]{resources/figures/errorbar_frontal.png} \\
@@ -208,21 +221,39 @@ Figure \ref{fig:results} shows results of camera pose estimation and distance fr
 (c) & (d)
 \end{tabular}
 \caption{	
-(a) Camera pose estimation results for the frontal case.  
-True camera position is the solid red axis.  
-Estimated camera positions for near/medium/far are shown in cyan/magenta/green respectively.   
-(b) Distance estimate as an average of exemplar models.  
-We test $20$ camera positions and corresponding focal length to keep distance between outermost fiducials next to eye at a near constant. 
-(c) and (d) show equivalent results for $3/4$ profile view.}
+Results of camera pose and distance estimation for the frontal and $3/4$ profile views.
+(a) and (c) show clusters of estimated camera poses for three distances for the frontal and $3/4$ profile views.
+The clusters of poses for each of the three distances are marked using cyan, magenta, and green camera frames, with the ground truth pose marked in red.
+(b) and (d) show true and estimated camera distances as a function of camera position, where distance is measured from the camera center to the tip of the nose.
+We test $20$ camera positions.
+The estimated distances are shown with error bars to represent the variation across exemplars.
+Note the final distance estimate closely follows the true camera distance, though the error bars get larger as the distance increases.  
+This is especially true for the $3/4$ profile view, presumably due to fewer number of visible fiducials.   
+%  Camera pose estimation results for the frontal case.  
+% True camera position is the solid red axis.  
+% Estimated camera positions for near/medium/far are shown in cyan/magenta/green respectively.   
+% (b) Distance estimate as an average of exemplar models.  
+% We test $20$ camera positions and corresponding focal length to keep distance between outermost fiducials next to eye at a near constant. 
+% (c) and (d) show equivalent results for $3/4$ profile view.
+}
 \label{fig:results}
 \end{figure}
 
-Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment with different numbers of fiducials used in the \EPnP~algorithm.  For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  This figure shows the distance can be reliably estimated with as little as five fiducials.  In the case of five fiducials, the fiducials used were outer corners of eyes and mouth, and center of top lip.  When using only four fiducials, the center of top lip was removed, resulting in 4 nearly co-planar points.  At this point, the distance estimate becomes unreliable.
+Figure \ref{fig:error_bar_frontal_lessfiducials} shows the same experiment where the number of fiducials is varied.  
+For this experiment, we manually selected the fiducial subsets to be evenly distributed about the face.  
+This figure shows the distance can be reliably estimated with as few as five fiducials.  
+In the case of five fiducials, the fiducials used were outer corners of eyes and mouth, and center of top lip.
+When using only four fiducials, the center of top lip was removed, resulting in 4 nearly co-planar points.
+At this point, the distance estimate becomes unreliable.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.8\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
-\caption{Error bars of camera distance for the frontal view using different numbers of fiducials.}
+\includegraphics[width=1\linewidth]{resources/figures/errorbar_frontal_lessfiducials.png}
+\caption{
+Results of camera distance estimation for the frontal view for varying numbers of fiducials.
+As in Figure \ref{fig:results}, error bars represent the variation in estimated distance across exemplars, but the actual estimate is the mean.
+This shows distance can be reliably estimated with as few as five fiducials.
+}
 \label{fig:error_bar_frontal_lessfiducials}
 \end{figure}
 
